@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Đường Huyết Thông Minh - Quiz GI Thấp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap&subset=vietnamese" rel="stylesheet">
+  <style>
+    :root {
+      --green: #18a84a;
+      --deep-green: #0b6f32;
+      --lime: #b6f26d;
+      --orange: #ff8a00;
+      --red: #e53935;
+      --blue: #0c73ff;
+      --yellow: #ffd84d;
+      --ink: #172033;
+      --soft: rgba(255,255,255,.88);
+      --glass: rgba(255,255,255,.18);
+      --border: rgba(255,255,255,.38);
+      --shadow: 0 22px 60px rgba(2, 35, 16, .24);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255, 216, 77, .88) 0, transparent 24%),
+        radial-gradient(circle at 88% 12%, rgba(76, 214, 91, .7) 0, transparent 26%),
+        linear-gradient(135deg, #0a7b38 0%, #1db954 46%, #b7ef75 100%);
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      filter: blur(6px);
+      opacity: .18;
+      pointer-events: none;
+      background: #ffffff;
+    }
+
+    body::before { left: -80px; bottom: 8%; }
+    body::after { right: -90px; top: 20%; }
+
+    .app {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      min-height: 100svh;
+      padding: 20px 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shell {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(255,255,255,.72));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .hero {
+      padding: 24px 22px 16px;
+      background:
+        linear-gradient(135deg, rgba(3, 95, 40, .94), rgba(12, 180, 73, .88)),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><circle cx="28" cy="26" r="9" fill="white" opacity="0.13"/><circle cx="118" cy="68" r="12" fill="white" opacity="0.10"/><circle cx="76" cy="126" r="7" fill="white" opacity="0.12"/></svg>');
+      color: white;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.32);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .1px;
+    }
+
+    .title {
+      margin: 14px 0 8px;
+      font-size: clamp(27px, 6vw, 48px);
+      line-height: 1.06;
+      font-weight: 900;
+      letter-spacing: -.7px;
+      text-shadow: 0 4px 18px rgba(0,0,0,.18);
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(14px, 3.8vw, 18px);
+      line-height: 1.55;
+      font-weight: 500;
+      color: rgba(255,255,255,.94);
+    }
+
+    .content { padding: 18px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 16px;
+    }
+
+    .panel {
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(20, 100, 42, .12);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(21, 91, 42, .08);
+    }
+
+    .panel h2, .panel h3 {
+      margin: 0 0 10px;
+      color: var(--deep-green);
+      font-size: 20px;
+    }
+
+    .panel p, .panel li {
+      font-size: 15px;
+      line-height: 1.62;
+    }
+
+    .rules {
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .rules li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: linear-gradient(135deg, rgba(24,168,74,.10), rgba(255,216,77,.18));
+      border-radius: 16px;
+      padding: 10px 12px;
+      font-weight: 600;
+    }
+
+    .tick {
+      flex: 0 0 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      font-size: 13px;
+      background: linear-gradient(135deg, var(--green), var(--deep-green));
+      box-shadow: 0 8px 16px rgba(24,168,74,.28);
+    }
+
+    .quick-card {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .gi-row {
+      padding: 12px 14px;
+      border-radius: 18px;
+      color: white;
+      font-weight: 800;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gi-row span:last-child { white-space: nowrap; }
+    .gi-high { background: linear-gradient(135deg, #ff6a00, #ffb000); }
+    .gi-mid { background: linear-gradient(135deg, #96c700, #d9e940); color: #233500; }
+    .gi-low { background: linear-gradient(135deg, #00a63d, #0b7f2c); }
+
+    .start-area {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 900;
+      border-radius: 18px;
+      padding: 15px 18px;
+      color: white;
+      background: linear-gradient(135deg, #ff7a00 0%, #ffcf21 45%, #17b84f 100%);
+      box-shadow: 0 14px 30px rgba(255, 125, 0, .22);
+      transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+      min-height: 52px;
+      letter-spacing: .2px;
+    }
+
+    .btn:active { transform: translateY(1px) scale(.99); }
+    .btn:hover { filter: brightness(1.03); box-shadow: 0 16px 35px rgba(18, 151, 67, .26); }
+
+    .btn.secondary {
+      background: linear-gradient(135deg, #0c73ff, #00c2ff);
+      box-shadow: 0 14px 30px rgba(12,115,255,.18);
+    }
+
+    .quiz { display: none; }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .progress-wrap {
+      height: 14px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(11,111,50,.12);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,.06);
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00b84a, #ffde38, #ff8a00);
+      border-radius: inherit;
+      transition: width .35s ease;
+    }
+
+    .pill {
+      min-width: 82px;
+      text-align: center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      background: #fff;
+      color: var(--deep-green);
+      border: 1px solid rgba(11,111,50,.12);
+      box-shadow: 0 8px 18px rgba(21,91,42,.08);
+      white-space: nowrap;
+    }
+
+    .timer {
+      color: #fff;
+      background: linear-gradient(135deg, #ff5a2d, #ffbc28);
+      min-width: 100px;
+    }
+
+    .timer.warning {
+      animation: pulse 1s infinite;
+      background: linear-gradient(135deg, #e53935, #ff7a00);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    .question-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(255,255,255,.78));
+      border: 1px solid rgba(20,100,42,.14);
+      border-radius: 26px;
+      padding: 20px;
+      box-shadow: 0 14px 36px rgba(21,91,42,.1);
+    }
+
+    .question-meta {
+      color: var(--orange);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .question {
+      margin: 0 0 16px;
+      font-size: clamp(20px, 4.8vw, 30px);
+      line-height: 1.25;
+      font-weight: 900;
+      color: #13231a;
+    }
+
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .answer {
+      position: relative;
+      min-height: 72px;
+      border: 0;
+      border-radius: 20px;
+      padding: 14px 14px 14px 52px;
+      cursor: pointer;
+      text-align: left;
+      color: white;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.35;
+      background: linear-gradient(135deg, #1856d6 0%, #21c06b 100%);
+      box-shadow: 0 13px 26px rgba(20, 86, 214, .18);
+      transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+      overflow: hidden;
+    }
+
+    .answer::before {
+      content: attr(data-letter);
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.24);
+      border: 1px solid rgba(255,255,255,.38);
+      font-weight: 900;
+    }
+
+    .answer::after {
+      content: "";
+      position: absolute;
+      inset: -40% auto auto 48%;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.13);
+      pointer-events: none;
+    }
+
+    .answer:nth-child(2) { background: linear-gradient(135deg, #7a3cff 0%, #ff7a45 100%); }
+    .answer:nth-child(3) { background: linear-gradient(135deg, #ff8900 0%, #ff3d77 100%); }
+    .answer:nth-child(4) { background: linear-gradient(135deg, #009a9a 0%, #00c853 100%); }
+
+    .answer:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(12, 115, 255, .22); }
+    .answer:disabled { cursor: not-allowed; filter: saturate(.9); }
+    .answer.correct { background: linear-gradient(135deg, #00c853, #138a37) !important; box-shadow: 0 16px 32px rgba(0,200,83,.26); }
+    .answer.wrong { background: linear-gradient(135deg, #ff1744, #b71c1c) !important; box-shadow: 0 16px 32px rgba(229,57,53,.24); }
+
+    .feedback {
+      min-height: 86px;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      line-height: 1.55;
+      background: linear-gradient(135deg, rgba(255,216,77,.28), rgba(24,168,74,.12));
+      border: 1px solid rgba(11,111,50,.12);
+      display: none;
+    }
+
+    .feedback.show { display: block; animation: pop .22s ease; }
+    @keyframes pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .feedback strong { color: var(--deep-green); }
+
+    .next-row {
+      display: none;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    .result {
+      display: none;
+      text-align: center;
+      padding: 26px 18px 8px;
+    }
+
+    .score-circle {
+      width: 172px;
+      height: 172px;
+      margin: 8px auto 18px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: conic-gradient(from 0deg, #00c853, #b9f071, #ffcf21, #00c853);
+      box-shadow: 0 18px 40px rgba(21, 91, 42, .2);
+    }
+
+    .score-inner {
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0b6f32, #18a84a);
+      display: grid;
+      place-items: center;
+      font-size: 34px;
+      font-weight: 900;
+    }
+
+    .result h2 {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 6vw, 42px);
+      color: var(--deep-green);
+    }
+
+    .encourage {
+      margin: 12px auto 20px;
+      max-width: 720px;
+      font-size: 17px;
+      line-height: 1.6;
+      font-weight: 700;
+      color: #263429;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: rgba(23,32,51,.68);
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .confetti i {
+      position: absolute;
+      width: 10px;
+      height: 16px;
+      top: -20px;
+      border-radius: 3px;
+      animation: fall 950ms linear forwards;
+      background: hsl(var(--hue), 92%, 55%);
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: .15; }
+    }
+
+    @media (max-width: 760px) {
+      .app { padding: 10px 10px 24px; align-items: stretch; }
+      .shell { border-radius: 24px; }
+      .hero { padding: 22px 18px 16px; }
+      .content { padding: 14px; }
+      .grid { grid-template-columns: 1fr; }
+      .topbar { grid-template-columns: 1fr 78px; }
+      .topbar .pill.score-pill { grid-column: 1 / -1; order: 3; }
+      .timer { min-width: 78px; }
+      .answers { grid-template-columns: 1fr; }
+      .answer { min-height: 64px; font-size: 15.5px; }
+      .question-card { padding: 16px; }
+      .panel { padding: 16px; }
+      .btn { width: 100%; }
+      .next-row .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="confetti" id="confetti"></div>
+  <main class="app">
+    <section class="shell" aria-label="Trò chơi trắc nghiệm GI thấp">
+      <header class="hero">
+        <div class="badge">🎮 Ngày 5 · F1 · Chỉ số đường huyết GI thấp</div>
+        <h1 class="title">Đường Huyết Thông Minh</h1>
+        <p class="subtitle">Chọn đúng thực phẩm có chỉ số GI thấp để giúp cơ thể hấp thu chậm hơn, no lâu hơn và duy trì năng lượng ổn định hơn.</p>
+      </header>
+
+      <section class="content intro" id="intro">
+        <div class="grid">
+          <div class="panel">
+            <h2>1. Tên trò chơi</h2>
+            <p><strong>Đường Huyết Thông Minh</strong> — thử thách 5 câu giúp học viên nhận diện thực phẩm có chỉ số đường huyết thấp.</p>
+
+            <h2>2. Hướng dẫn chơi</h2>
+            <ul class="rules">
+              <li><span class="tick">1</span><span>Mỗi câu có 4 đáp án A, B, C, D. Học viên chọn 1 đáp án đúng nhất.</span></li>
+              <li><span class="tick">2</span><span>Thời gian: <strong>40 giây/câu</strong>. Hết giờ hệ thống tự chuyển sang câu tiếp theo.</span></li>
+              <li><span class="tick">3</span><span>Điểm số: <strong>2 điểm/câu</strong>. Tổng điểm tối đa: <strong>10 điểm</strong>.</span></li>
+              <li><span class="tick">4</span><span>Trả lời đúng nút hiện màu xanh lá, trả lời sai nút hiện màu đỏ và phát âm thanh phản hồi.</span></li>
+            </ul>
+
+            <div class="start-area">
+              <button class="btn" id="startBtn">Bắt đầu trò chơi 🚀</button>
+              <button class="btn secondary" id="soundBtn">🔊 Nhạc: Bật</button>
+            </div>
+          </div>
+
+          <aside class="panel">
+            <h3>Ghi nhớ nhanh</h3>
+            <p>Chỉ số GI cho biết khả năng thực phẩm làm tăng đường huyết sau khi ăn.</p>
+            <div class="quick-card" aria-label="Phân loại GI">
+              <div class="gi-row gi-high"><span>GI cao</span><span>&gt;= 70</span></div>
+              <div class="gi-row gi-mid"><span>GI trung bình</span><span>56 – 69</span></div>
+              <div class="gi-row gi-low"><span>GI thấp</span><span>&lt;= 55</span></div>
+            </div>
+            <p><strong>Mục tiêu:</strong> ưu tiên nhóm GI thấp như táo, khoai lang, yến mạch, cà chua, sữa đậu nành, gạo lứt, lạc, F1.</p>
+          </aside>
+        </div>
+        <p class="footer-note">Font Montserrat hỗ trợ tiếng Việt. Trò chơi tối ưu để mở trực tiếp trên điện thoại iPhone hoặc trình duyệt máy tính.</p>
+      </section>
+
+      <section class="content quiz" id="quiz">
+        <div class="topbar">
+          <div class="progress-wrap" aria-label="Tiến độ câu hỏi"><div class="progress" id="progress"></div></div>
+          <div class="pill timer" id="timer">40s</div>
+          <div class="pill score-pill" id="scorePill">Điểm: 0/10</div>
+        </div>
+
+        <article class="question-card">
+          <div class="question-meta" id="questionMeta">Câu 1 · 40 giây · 2 điểm</div>
+          <h2 class="question" id="questionText"></h2>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback"></div>
+          <div class="next-row" id="nextRow"><button class="btn" id="nextBtn">Câu tiếp theo ➜</button></div>
+        </article>
+      </section>
+
+      <section class="content result" id="result">
+        <div class="score-circle"><div class="score-inner" id="finalScore">0/10</div></div>
+        <h2 id="resultTitle">Hoàn thành!</h2>
+        <p class="encourage" id="encourageText"></p>
+        <button class="btn" id="restartBtn">Chơi lại để nhớ bài hơn 🔁</button>
+        <p class="footer-note">Câu khích lệ: Mỗi lựa chọn đúng hôm nay là một bước nhỏ giúp bạn xây dựng thói quen ăn uống thông minh hơn mỗi ngày.</p>
+      </section>
+    </section>
+  </main>
+
+  <audio id="bgMusic" src="music.mp3" preload="auto" loop></audio>
+  <script>
+    const questions = [
+      {
+        question: "Câu 1: Chỉ số đường huyết GI của thực phẩm dùng để đo điều gì?",
+        answers: [
+          "Khả năng làm tăng đường huyết sau khi ăn",
+          "Lượng đạm có trong thực phẩm",
+          "Độ mặn của món ăn",
+          "Số lượng vitamin trong thực phẩm"
+        ],
+        correct: 0,
+        explain: "GI là thước đo khả năng thực phẩm làm tăng đường huyết sau khi ăn. Nhớ đúng khái niệm này sẽ giúp bạn chọn món thông minh hơn."
+      },
+      {
+        question: "Câu 2: Theo tài liệu, thực phẩm có GI thấp là nhóm nào?",
+        answers: [
+          "GI từ 56 đến 69",
+          "GI từ 70 trở lên",
+          "GI từ 55 trở xuống",
+          "GI luôn bằng 100"
+        ],
+        correct: 2,
+        explain: "Thực phẩm có GI thấp là nhóm có chỉ số từ 55 trở xuống. Đây là nhóm nên ưu tiên để cơ thể hấp thu chậm hơn."
+      },
+      {
+        question: "Câu 3: Đâu là một thực phẩm thuộc nhóm GI thấp trong tài liệu?",
+        answers: [
+          "Cơm trắng",
+          "Bánh mì",
+          "Táo",
+          "Khoai tây chiên"
+        ],
+        correct: 2,
+        explain: "Táo có GI khoảng 46, thuộc nhóm GI thấp. Cơm trắng, bánh mì và khoai tây chiên nằm trong nhóm GI cao."
+      },
+      {
+        question: "Câu 4: Thực phẩm GI cao thường có đặc điểm gì?",
+        answers: [
+          "Hấp thu chậm và giúp no lâu hơn",
+          "Hấp thu nhanh, dễ làm đường huyết tăng đột ngột",
+          "Không ảnh hưởng đến đường huyết",
+          "Luôn giàu chất xơ hơn nhóm GI thấp"
+        ],
+        correct: 1,
+        explain: "Thực phẩm GI cao hấp thu nhanh và có thể làm đường huyết tăng đột ngột. Vì vậy cần lựa chọn và phối hợp bữa ăn hợp lý."
+      },
+      {
+        question: "Câu 5: Khi muốn chọn thực phẩm GI thấp để có sức khỏe tốt hơn, lựa chọn nào phù hợp nhất?",
+        answers: [
+          "Yến mạch, khoai lang, cà chua, sữa đậu nành",
+          "Bánh quy, cola, mì tôm, xôi",
+          "Bánh mì, cơm trắng, dưa hấu, khoai tây chiên",
+          "Burger, bánh xốp, mì ống, kem"
+        ],
+        correct: 0,
+        explain: "Yến mạch, khoai lang, cà chua và sữa đậu nành đều nằm trong nhóm GI thấp theo tài liệu. Đây là lựa chọn tốt hơn cho bữa ăn hằng ngày."
+      }
+    ];
+
+    const intro = document.getElementById('intro');
+    const quiz = document.getElementById('quiz');
+    const result = document.getElementById('result');
+    const startBtn = document.getElementById('startBtn');
+    const soundBtn = document.getElementById('soundBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const nextRow = document.getElementById('nextRow');
+    const questionMeta = document.getElementById('questionMeta');
+    const questionText = document.getElementById('questionText');
+    const answersBox = document.getElementById('answers');
+    const feedback = document.getElementById('feedback');
+    const progress = document.getElementById('progress');
+    const timerEl = document.getElementById('timer');
+    const scorePill = document.getElementById('scorePill');
+    const finalScore = document.getElementById('finalScore');
+    const resultTitle = document.getElementById('resultTitle');
+    const encourageText = document.getElementById('encourageText');
+    const confettiBox = document.getElementById('confetti');
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.35;
+
+    let current = 0;
+    let score = 0;
+    let timeLeft = 40;
+    let timerId = null;
+    let answered = false;
+    let audioCtx = null;
+    let musicEnabled = true;
+
+      async function startMusic() {
+        if (!musicEnabled) return;
+        try { bgMusic.loop = true; bgMusic.volume = 0.35; await bgMusic.play(); }
+        catch (err) { console.warn('Background music will start after user interaction.', err); }
+      }
+      function stopMusic() { bgMusic.pause(); }
+      function updateSoundButton() {
+        soundBtn.textContent = musicEnabled ? '🔊 Nhạc: Bật' : '🔇 Nhạc: Tắt';
+      }
+
+    function ensureAudio() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!audioCtx && AudioContext) audioCtx = new AudioContext();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playTone(type = 'correct') {
+      ensureAudio();
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const master = audioCtx.createGain();
+      master.connect(audioCtx.destination);
+      master.gain.setValueAtTime(0.0001, now);
+      master.gain.exponentialRampToValueAtTime(type === 'correct' ? 0.16 : 0.12, now + 0.02);
+      master.gain.exponentialRampToValueAtTime(0.0001, now + (type === 'correct' ? 0.55 : 0.42));
+
+      const notes = type === 'correct' ? [880, 1175, 1568] : [220, 164];
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type === 'correct' ? 'sine' : 'sawtooth';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.09);
+        gain.gain.setValueAtTime(0.0001, now + idx * 0.09);
+        gain.gain.exponentialRampToValueAtTime(0.9, now + idx * 0.09 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.09 + 0.18);
+        osc.connect(gain).connect(master);
+        osc.start(now + idx * 0.09);
+        osc.stop(now + idx * 0.09 + 0.22);
+      });
+    }
+
+    function startGame() {
+      ensureAudio();
+      musicEnabled = true;
+      updateSoundButton();
+      startMusic();
+      current = 0;
+      score = 0;
+      intro.style.display = 'none';
+      result.style.display = 'none';
+      quiz.style.display = 'block';
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      clearInterval(timerId);
+      answered = false;
+      timeLeft = 40;
+      const q = questions[current];
+      questionMeta.textContent = `Câu ${current + 1} · 40 giây · 2 điểm`;
+      questionText.textContent = q.question;
+      answersBox.innerHTML = '';
+      feedback.classList.remove('show');
+      feedback.style.display = 'none';
+      feedback.innerHTML = '';
+      nextRow.style.display = 'none';
+      progress.style.width = `${(current / questions.length) * 100}%`;
+      scorePill.textContent = `Điểm: ${score}/10`;
+
+      q.answers.forEach((answer, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer';
+        btn.type = 'button';
+        btn.dataset.letter = ['A', 'B', 'C', 'D'][index];
+        btn.textContent = answer;
+        btn.addEventListener('click', () => chooseAnswer(index));
+        answersBox.appendChild(btn);
+      });
+
+      updateTimer();
+      timerId = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) handleTimeout();
+      }, 1000);
+    }
+
+    function updateTimer() {
+      timerEl.textContent = `${timeLeft}s`;
+      timerEl.classList.toggle('warning', timeLeft <= 10);
+    }
+
+    function chooseAnswer(index) {
+      if (answered) return;
+      answered = true;
+      clearInterval(timerId);
+      const q = questions[current];
+      const buttons = [...document.querySelectorAll('.answer')];
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (index === q.correct) {
+        score += 2;
+        buttons[index].classList.add('correct');
+        playTone('correct');
+        sparkle(22);
+        feedback.innerHTML = `<strong>Chính xác! +2 điểm.</strong><br>${q.explain}<br>🌿 Tuyệt vời, bạn đang chọn thực phẩm thông minh hơn rồi!`;
+      } else {
+        buttons[index].classList.add('wrong');
+        buttons[q.correct].classList.add('correct');
+        playTone('wrong');
+        feedback.innerHTML = `<strong>Chưa đúng rồi, mình cùng ghi nhớ lại nhé.</strong><br>${q.explain}<br>💪 Không sao cả, sai một lần là nhớ bài lâu hơn!`;
+      }
+
+      scorePill.textContent = `Điểm: ${score}/10`;
+      feedback.style.display = 'block';
+      feedback.classList.add('show');
+      nextRow.style.display = 'flex';
+    }
+
+    function handleTimeout() {
+      if (answered) return;
+      answered = true;
+      clearInterval(timerId);
+      const q = questions[current];
+      const buttons = [...document.querySelectorAll('.answer')];
+      buttons.forEach(btn => btn.disabled = true);
+      buttons[q.correct].classList.add('correct');
+      playTone('wrong');
+      feedback.innerHTML = `<strong>Hết 40 giây!</strong><br>Đáp án đúng là <strong>${['A','B','C','D'][q.correct]}. ${q.answers[q.correct]}</strong>.<br>${q.explain}<br>⏱️ Lần sau mình đọc nhanh hơn một chút nhé!`;
+      feedback.style.display = 'block';
+      feedback.classList.add('show');
+      nextRow.style.display = 'flex';
+    }
+
+    function nextQuestion() {
+      if (current < questions.length - 1) {
+        current++;
+        renderQuestion();
+      } else {
+        finishGame();
+      }
+    }
+
+    function finishGame() {
+      clearInterval(timerId);
+      stopMusic();
+      quiz.style.display = 'none';
+      result.style.display = 'block';
+      progress.style.width = '100%';
+      finalScore.textContent = `${score}/10`;
+
+      if (score >= 8) {
+        resultTitle.textContent = 'Xuất sắc! Bạn rất hiểu bài!';
+        encourageText.textContent = 'Bạn đã nhận diện nhóm thực phẩm GI thấp rất tốt. Hãy tiếp tục ưu tiên những lựa chọn hấp thu chậm, no lâu và phù hợp với sức khỏe hằng ngày.';
+        sparkle(56);
+        playTone('correct');
+      } else if (score >= 6) {
+        resultTitle.textContent = 'Rất tốt, bạn đang tiến bộ!';
+        encourageText.textContent = 'Bạn đã nắm được phần quan trọng của bài học. Chỉ cần luyện thêm một lượt nữa, việc phân biệt GI thấp, trung bình và cao sẽ trở nên rất dễ dàng.';
+        sparkle(30);
+      } else {
+        resultTitle.textContent = 'Cố lên, mình học lại là nhớ ngay!';
+        encourageText.textContent = 'Điểm số chỉ là bước khởi động. Quan trọng là sau trò chơi này, bạn đã biết cần ưu tiên thực phẩm GI thấp để hỗ trợ cơ thể tốt hơn.';
+      }
+    }
+
+    function sparkle(count = 24) {
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement('i');
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.setProperty('--hue', Math.floor(Math.random() * 360));
+        piece.style.animationDelay = Math.random() * 0.25 + 's';
+        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+        confettiBox.appendChild(piece);
+        setTimeout(() => piece.remove(), 1300);
+      }
+    }
+
+    startBtn.addEventListener('click', startGame);
+    nextBtn.addEventListener('click', nextQuestion);
+    restartBtn.addEventListener('click', startGame);
+    soundBtn.addEventListener('click', () => {
+        ensureAudio();
+        musicEnabled = !musicEnabled;
+        updateSoundButton();
+        if (musicEnabled && quiz.style.display === 'block') startMusic(); else stopMusic();
+        if (musicEnabled) playTone('correct');
+      });
+     document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopMusic();
+        else if (musicEnabled && quiz.style.display === 'block') { ensureAudio(); startMusic(); }
+      });
+  </script>
+</body>
+</html>
